@@ -11,21 +11,40 @@ import {
 import { BsFillHandThumbsUpFill } from "react-icons/bs";
 import { BsFillTrashFill, BsThreeDots } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useDeletePostMutation } from "../../../features/api/apiSlice";
 
-const Post = () => {
+type postProps = {
+  id: string;
+  title: string;
+  message: string;
+  image: string;
+  tags: [string];
+  likes: [string];
+};
+
+const Post: React.FC<postProps> = ({
+  title,
+  message,
+  image,
+  tags,
+  likes,
+  id,
+}) => {
   const navigate = useNavigate();
-  const obj = {
-    selectedFile: "https://bit.ly/2Z4KKcF",
-    imageAlt: "Rear view of modern home with pool",
-    title: "Modern home",
-    message: "Modern home in city center in the heart of historic Los Angeles",
-    tags: ["Apple ", "Fruit", "Home"],
-    likes: ["asbda", "askjas"],
-    creator: "Sahil",
+
+  const handleEditButton = () => {
+    navigate(`/${id}`);
+  };
+
+  const [deletePost] = useDeletePostMutation();
+
+  const handleDeletePost = () => {
+    deletePost(id);
   };
 
   return (
     <Box
+      minW='2xs'
       maxW='2xs'
       borderWidth='1px'
       borderRadius='lg'
@@ -34,9 +53,9 @@ const Post = () => {
       m={1}
     >
       <Image
-        src={obj.selectedFile}
-        alt={obj.imageAlt}
-        onClick={() => navigate("/post")}
+        src={image}
+        alt={title}
+        onClick={() => navigate(`/post/${id}`)}
         cursor='pointer'
         w='full'
         h={150}
@@ -51,29 +70,36 @@ const Post = () => {
         position='absolute'
         top='1'
         right='1'
+        onClick={handleEditButton}
       />
       <Box p='2'>
         <Box display='flex' alignItems='baseline'>
-          {obj.tags.map((tag) => (
+          {tags.map((tag) => (
             <Text key={tag} fontSize='sm' color='gray.500'>
               # {tag}&nbsp;{" "}
             </Text>
           ))}
         </Box>
         <Box mt='1' fontWeight='bold' as='h4' lineHeight='tight' noOfLines={1}>
-          {obj.title}
+          {title}
         </Box>
-        <Text  fontSize='sm' color='gray.600' mt='2' mb='2'>
-          {obj.message}
+        <Text fontSize='sm' color='gray.600' mt='2' mb='2'>
+          {message}
         </Text>
         <Flex>
           <Button as='span' ml='2' color='gray.600' fontSize='sm'>
             <BsFillHandThumbsUpFill />
             &nbsp;
-            {obj.likes.length > 1 ? "Likes" : "Like"}
+            {likes.length > 1 ? "Likes" : "Like"}
           </Button>
           <Spacer />
-          <Button as='span' ml='2' colorScheme='red' fontSize='sm'>
+          <Button
+            as='span'
+            ml='2'
+            colorScheme='red'
+            fontSize='sm'
+            onClick={handleDeletePost}
+          >
             <BsFillTrashFill />
             &nbsp; Delete
           </Button>

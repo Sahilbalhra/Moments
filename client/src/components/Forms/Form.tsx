@@ -1,18 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import { Button, Box, Input, Text, Textarea } from "@chakra-ui/react";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { createPost } from "../../actions/postActions";
+import {
+  useCreatePostMutation,
+  // useGetPostQuery,
+} from "../../features/api/apiSlice";
+import { useParams } from "react-router-dom";
 
 const Form = () => {
-  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     title: "",
     message: "",
     tags: [""],
     selectedFile: "",
   });
+  const { id } = useParams();
+  console.log(id);
+  const [createPost] = useCreatePostMutation();
+  // const { data } = useGetPostQuery(id ? id : "");
+
+  // if (data?.data) {
+  //   setFormData({
+  //     title: data?.data.title,
+  //     message: data?.data.message,
+  //     tags: data?.data.tags,
+  //     selectedFile: data?.data.selectedFile,
+  //   });
+  // }
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,13 +41,18 @@ const Form = () => {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // console.log("Form Date:", formData);
-    dispatch(createPost(formData));
+    console.log("Form Date:", formData);
+    createPost(formData);
 
     handleClear();
   };
   return (
-    <Box as='form' onSubmit={handleSubmit} textAlign='center'>
+    <Box
+      as='form'
+      onSubmit={handleSubmit}
+      textAlign='center'
+      height='-moz-max-content'
+    >
       <Text mb='4' fontSize='xl' as='b'>
         Create Your Moment
       </Text>
@@ -61,7 +80,7 @@ const Form = () => {
         placeholder='Tags'
         value={formData.tags}
         onChange={(e) =>
-          setFormData({ ...formData, tags: e.target.value.split(" ") })
+          setFormData({ ...formData, tags: e.target.value.split(",") })
         }
         mb={2}
         isRequired

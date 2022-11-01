@@ -7,9 +7,10 @@ const postSchema = new mongoose.Schema(
     // required: true,
     // },
     creatorId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
+      // type: mongoose.Schema.Types.ObjectId,
+      type: String,
+      // ref: "user",
+      required: false,
     },
     selectedFile: { type: String, required: true },
     tags: {
@@ -37,7 +38,9 @@ const postSchema = new mongoose.Schema(
       required: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export const postsModel = mongoose.model("posts", postSchema);
