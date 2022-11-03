@@ -3,12 +3,12 @@ import { Post, AllPosts } from "../../models/posts.model";
 
 export const apiSlice = createApi({
   reducerPath: "posts",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/posts" }),
   tagTypes: ["Posts"],
   endpoints: (builder) => ({
     createPost: builder.mutation<Post, any>({
       query: (post) => ({
-        url: "/posts",
+        url: "/",
         method: "POST",
         body: post,
       }),
@@ -16,14 +16,14 @@ export const apiSlice = createApi({
     }),
     deletePost: builder.mutation<Post, string>({
       query: (id) => ({
-        url: `/posts/${id}`,
+        url: `/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Posts"],
     }),
     updatePost: builder.mutation<Post, any>({
       query: (body) => ({
-        url: `/posts/${body.id}`,
+        url: `/${body.id}`,
         method: "PATCH",
         body: body.formData,
       }),
@@ -31,13 +31,13 @@ export const apiSlice = createApi({
     }),
     getPost: builder.query<Post, string>({
       query: (id) => ({
-        url: `/posts/${id}`,
+        url: `/${id}`,
         method: "GET",
       }),
       providesTags: ["Posts"],
     }),
     getPosts: builder.query<AllPosts, void>({
-      query: () => "/posts",
+      query: () => "/",
       providesTags: ["Posts"],
     }),
   }),

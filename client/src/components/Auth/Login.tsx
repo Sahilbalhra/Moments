@@ -12,6 +12,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { FcGoogle } from "react-icons/fc";
 
 import { useGoogleLogin } from "@react-oauth/google";
+import { useSignInUserMutation } from "../../features/api/authSlice";
 
 type formprops = {
   handleForm: (data: boolean) => void;
@@ -25,9 +26,19 @@ const Login: React.FC<formprops> = ({ handleForm }) => {
 
   const handleClick = () => setShow(!show);
 
+  const [signIn, { data, isSuccess, isError, isLoading }] =
+    useSignInUserMutation();
+
+  if (isSuccess) {
+    console.log("SignIn successful", data);
+  } else if (isError) {
+    console.log("Error while signIn", data);
+  }
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log("Form data:", form);
+    signIn(form);
     handleClear();
   };
 
@@ -97,7 +108,11 @@ const Login: React.FC<formprops> = ({ handleForm }) => {
           </Button>
           <Text m={2} color='gray.500'>
             Do not Have account ?{" "}
-            <Button variant='link' onClick={() => handleForm(false)}>
+            <Button
+              variant='link'
+              onClick={() => handleForm(false)}
+              isLoading={isLoading}
+            >
               {" "}
               Register here
             </Button>

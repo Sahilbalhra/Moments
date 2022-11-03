@@ -13,6 +13,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { FcGoogle } from "react-icons/fc";
 
 import { useGoogleLogin } from "@react-oauth/google";
+import { useSignUpUserMutation } from "../../features/api/authSlice";
 type formprops = {
   handleForm: (data: boolean) => void;
 };
@@ -28,11 +29,20 @@ const Signup: React.FC<formprops> = ({ handleForm }) => {
   const [show, setShow] = useState(false);
 
   const handleClick = () => setShow(!show);
+  const [signUpUser, { data, isSuccess, isError, isLoading }] =
+    useSignUpUserMutation();
+
+  if (isSuccess) {
+    console.log("SignUp successful", data);
+  } else if (isError) {
+    console.log("Error while signUp", data);
+  }
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log("Form data:", form);
-    handleClear();
+    signUpUser(form);
+    // handleClear();
   };
 
   const handleChange = (e: any) => {
@@ -139,7 +149,13 @@ const Signup: React.FC<formprops> = ({ handleForm }) => {
               Login here
             </Button>
           </Text>
-          <Button type='submit' colorScheme='pink' w='full' sx={{ mb: 2 }}>
+          <Button
+            type='submit'
+            colorScheme='pink'
+            w='full'
+            sx={{ mb: 2 }}
+            isLoading={isLoading}
+          >
             Create Account
           </Button>
           <Button colorScheme='gray' w='full' onClick={() => login()}>

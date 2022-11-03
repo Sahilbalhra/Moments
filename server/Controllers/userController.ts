@@ -122,6 +122,7 @@ export const createUser = async (req: Request, res: Response) => {
   } else {
     // normal form signup
     const { email, password, confirmPassword, firstName, lastName } = req.body;
+    console.log("Request data",req.body)
     try {
       const existingUser = await userModel.findOne({
         email,
