@@ -7,6 +7,7 @@ export interface Data {
   title: string;
   comments: [string];
   likes: [string];
+  updatedAt:string
 }
 export interface Post {
   message: string;

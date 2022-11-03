@@ -11,14 +11,15 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import { selectCurrentUser } from "../../features/user/userSlice";
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
-
-  // const user = useSelector(selectCurrentUser);
   const user = JSON.parse(localStorage.getItem("user") as any);
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/auth");
+  };
 
   return (
     <Flex
@@ -45,7 +46,7 @@ const NavBar: React.FC = () => {
               <Avatar cursor='pointer' src={user.profilePicture} />
               <span>{user.name}</span>
             </MenuItem>
-            <MenuItem>LogOut</MenuItem>
+            <MenuItem onClick={handleLogOut}>LogOut</MenuItem>
           </MenuList>
         </Menu>
       ) : (

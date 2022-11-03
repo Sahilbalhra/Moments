@@ -11,7 +11,10 @@ import {
 import { BsFillHandThumbsUpFill } from "react-icons/bs";
 import { BsFillTrashFill, BsThreeDots } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useDeletePostMutation } from "../../features/api/apiSlice";
+import {
+  useDeletePostMutation,
+  useLikePostsMutation,
+} from "../../features/api/apiSlice";
 
 type postProps = {
   id: string;
@@ -34,14 +37,24 @@ const Post: React.FC<postProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleEditButton = () => {
+  const handleEditPost = () => {
     setCurrentId(id);
   };
 
   const [deletePost] = useDeletePostMutation();
+  const [likePost] = useLikePostsMutation();
 
   const handleDeletePost = () => {
     deletePost(id);
+  };
+
+  const handleLikePost = () => {
+    const body = {
+      id,
+      userId: JSON.parse(localStorage.getItem("user") as string)._id,
+    };
+    console.log(body);
+    likePost(body);
   };
 
   return (
@@ -72,7 +85,7 @@ const Post: React.FC<postProps> = ({
         position='absolute'
         top='1'
         right='1'
-        onClick={handleEditButton}
+        onClick={handleEditPost}
       />
       <Box p='2'>
         <Box display='flex' alignItems='baseline'>
@@ -89,7 +102,13 @@ const Post: React.FC<postProps> = ({
           {message}
         </Text>
         <Flex>
-          <Button as='span' ml='2' color='gray.600' fontSize='sm'>
+          <Button
+            as='span'
+            ml='2'
+            color='gray.600'
+            fontSize='sm'
+            onClick={handleLikePost}
+          >
             <BsFillHandThumbsUpFill />
             &nbsp;
             {likes.length > 1 ? "Likes" : "Like"}

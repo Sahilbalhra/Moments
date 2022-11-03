@@ -11,7 +11,15 @@ const Home = () => {
         <GridItem w='70%'>
           <Posts setCurrentId={setCurrentId} />
         </GridItem>
-        <GridItem w='30%' p='6' m='5' boxShadow='lg' rounded='md' bg='white'>
+        <GridItem
+          w='30%'
+          p='6'
+          m='5'
+          boxShadow='lg'
+          rounded='md'
+          bg='white'
+          height='-webkit-fit-content'
+        >
           <Form currentId={currentId} setCurrentId={setCurrentId} />
         </GridItem>
       </Grid>

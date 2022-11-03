@@ -18,6 +18,14 @@ export const apiSlice = createApi({
   }),
   tagTypes: ["Posts"],
   endpoints: (builder) => ({
+    commentPost: builder.mutation<Post, any>({
+      query: (body) => ({
+        url: `/${body.id}/commentPost`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Posts"],
+    }),
     createPost: builder.mutation<Post, any>({
       query: (post) => ({
         url: "/",
@@ -52,13 +60,23 @@ export const apiSlice = createApi({
       query: () => "/",
       providesTags: ["Posts"],
     }),
+    likePosts: builder.mutation<Post, any>({
+      query: (body) => ({
+        url: `/${body.id}/likePost`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Posts"],
+    }),
   }),
 });
 
 export const {
+  useCommentPostMutation,
   useGetPostQuery,
   useGetPostsQuery,
   useUpdatePostMutation,
   useCreatePostMutation,
   useDeletePostMutation,
+  useLikePostsMutation,
 } = apiSlice;
