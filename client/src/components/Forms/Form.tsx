@@ -1,32 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Box, Input, Text, Textarea } from "@chakra-ui/react";
 import FileBase from "react-file-base64";
 import {
   useCreatePostMutation,
-  // useGetPostQuery,
+  useUpdatePostMutation,
+  useGetPostQuery,
 } from "../../features/api/apiSlice";
-import { useParams } from "react-router-dom";
 
-const Form = () => {
+type formProps = {
+  currentId: string | null;
+  setCurrentId: (active: string | null) => void;
+};
+
+const Form: React.FC<formProps> = ({ currentId, setCurrentId }) => {
   const [formData, setFormData] = useState({
     title: "",
     message: "",
     tags: [""],
     selectedFile: "",
   });
-  const { id } = useParams();
-  console.log(id);
-  const [createPost] = useCreatePostMutation();
-  // const { data } = useGetPostQuery(id ? id : "");
 
-  // if (data?.data) {
-  //   setFormData({
-  //     title: data?.data.title,
-  //     message: data?.data.message,
-  //     tags: data?.data.tags,
-  //     selectedFile: data?.data.selectedFile,
-  //   });
-  // }
+  const { data, isSuccess, isError } = useGetPostQuery(
+    currentId ? currentId : ""
+  );
+  const [createPost] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation();
+  useEffect(() => {
+    if (isSuccess && currentId) {
+      // console.log("Data for get Post in Form component:", typeof data?.data);
+      if (typeof data?.data === "object") {
+        const { title, message, tags, selectedFile } = data?.data;
+        setFormData({
+          title,
+          message,
+          tags,
+          selectedFile,
+        });
+      }
+    } else if (isError) {
+      console.log("Error while getting post data");
+    }
+  }, [data?.data, isError, isSuccess, currentId]);
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,8 +56,12 @@ const Form = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log("Form Date:", formData);
-    createPost(formData);
-
+    if (currentId) {
+      updatePost({ id: currentId, formData });
+      setCurrentId(null);
+    } else {
+      createPost(formData);
+    }
     handleClear();
   };
   return (
@@ -54,7 +72,7 @@ const Form = () => {
       height='-moz-max-content'
     >
       <Text mb='4' fontSize='xl' as='b'>
-        Create Your Moment
+        {currentId ? "Update" : "Create"} Your Memory
       </Text>
       <Input
         type='text'
@@ -93,9 +111,14 @@ const Form = () => {
         }
       />
       <Button w='full' mt={2} mb={2} colorScheme='pink' type='submit'>
-        Submit
+        {currentId ? "Update" : "Save"}
       </Button>
-      <Button w='full' colorScheme='purple' onClick={handleClear}>
+      <Button
+        w='full'
+        colorScheme='purple'
+        onClick={handleClear}
+        isDisabled={currentId ? true : false}
+      >
         Clear
       </Button>
     </Box>

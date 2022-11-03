@@ -21,6 +21,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Posts"],
     }),
+    updatePost: builder.mutation<Post, any>({
+      query: (body) => ({
+        url: `/posts/${body.id}`,
+        method: "PATCH",
+        body: body.formData,
+      }),
+      invalidatesTags: ["Posts"],
+    }),
     getPost: builder.query<Post, string>({
       query: (id) => ({
         url: `/posts/${id}`,
@@ -38,6 +46,7 @@ export const apiSlice = createApi({
 export const {
   useGetPostQuery,
   useGetPostsQuery,
+  useUpdatePostMutation,
   useCreatePostMutation,
   useDeletePostMutation,
 } = apiSlice;
