@@ -112,21 +112,22 @@ const Login: React.FC<formprops> = ({ handleForm }) => {
               bg='gray.200'
             />
           </InputGroup>
-          <Button type='submit' colorScheme='pink' w='full' sx={{ mb: 2 }}>
+          <Button type='submit' colorScheme='pink' w='full' sx={{ mb: 2 }} isLoading={isLoading}>
             Log In
           </Button>
           <Text m={2} color='gray.500'>
             Do not Have account ?{" "}
-            <Button
-              variant='link'
-              onClick={() => handleForm(false)}
-              isLoading={isLoading}
-            >
+            <Button variant='link' onClick={() => handleForm(false)}>
               {" "}
               Register here
             </Button>
           </Text>
-          <Button colorScheme='gray' w='full' onClick={() => login()}>
+          <Button
+            colorScheme='gray'
+            w='full'
+            onClick={() => login()}
+            isLoading={isLoading}
+          >
             <FcGoogle size={30} />
             &nbsp; Sign in with google
           </Button>
