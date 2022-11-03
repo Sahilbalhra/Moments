@@ -1,9 +1,9 @@
 import React from "react";
-import Home from "./components/Home/Home";
+import Home from "./Pages/Home/Home";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar";
-import Auth from "./components/Auth/Auth";
-import PostDetail from "./components/Posts/Post/PostDetail";
+import Auth from "./Pages/Auth/Auth";
+import PostDetail from "./Pages/Post/PostDetail";
 
 function App() {
   return (

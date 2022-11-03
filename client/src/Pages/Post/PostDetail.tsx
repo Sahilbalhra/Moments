@@ -18,7 +18,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { useGetPostQuery } from "../../../features/api/apiSlice";
+import { useGetPostQuery } from "../../features/api/apiSlice";
 
 const PostDetail = () => {
   const { id } = useParams();

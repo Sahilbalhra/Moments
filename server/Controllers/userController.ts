@@ -36,7 +36,7 @@ export const logIn = async (req: Request, res: Response) => {
           { expiresIn: "1h" }
         );
 
-        res.status(200).json({ result: existingUser, token });
+        res.status(200).json({ user: existingUser, token });
       })
       .catch((err) => {
         res.status(400).json({ message: "Invalid access token!" });
@@ -63,7 +63,7 @@ export const logIn = async (req: Request, res: Response) => {
         );
         res.status(201).json({
           message: "User logged in successfully",
-          data: existingUser,
+          user: existingUser,
           token,
         });
       } else {
@@ -80,7 +80,6 @@ export const logIn = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
   if (req.body.googleAccessToken) {
     const { googleAccessToken } = req.body;
-
     axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
         headers: {
@@ -98,7 +97,7 @@ export const createUser = async (req: Request, res: Response) => {
         if (existingUser)
           return res.status(400).json({ message: "User already exist!" });
 
-        const result = await userModel.create({
+        const user = await userModel.create({
           verified: "true",
           email,
           name: `${firstName} ${lastName}`,
@@ -107,14 +106,14 @@ export const createUser = async (req: Request, res: Response) => {
 
         const token = jwt.sign(
           {
-            email: result.email,
-            id: result._id,
+            email: user.email,
+            id: user._id,
           },
           secretKey || "test",
           { expiresIn: "1h" }
         );
 
-        res.status(200).json({ result, token });
+        res.status(200).json({ user, token });
       })
       .catch((err) => {
         res.status(400).json({ message: "Invalid access token!" });
@@ -122,7 +121,7 @@ export const createUser = async (req: Request, res: Response) => {
   } else {
     // normal form signup
     const { email, password, confirmPassword, firstName, lastName } = req.body;
-    console.log("Request data",req.body)
+    console.log("Request data", req.body);
     try {
       const existingUser = await userModel.findOne({
         email,
@@ -147,7 +146,7 @@ export const createUser = async (req: Request, res: Response) => {
         );
         res.status(201).json({
           message: "User has been created",
-          data: newUser,
+          user: newUser,
           token,
         });
       } else {

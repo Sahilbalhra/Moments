@@ -11,7 +11,7 @@ import {
 import { BsFillHandThumbsUpFill } from "react-icons/bs";
 import { BsFillTrashFill, BsThreeDots } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useDeletePostMutation } from "../../../features/api/apiSlice";
+import { useDeletePostMutation } from "../../features/api/apiSlice";
 
 type postProps = {
   id: string;
@@ -20,6 +20,7 @@ type postProps = {
   image: string;
   tags: [string];
   likes: [string];
+  setCurrentId: (active: string | null) => void;
 };
 
 const Post: React.FC<postProps> = ({
@@ -29,11 +30,12 @@ const Post: React.FC<postProps> = ({
   tags,
   likes,
   id,
+  setCurrentId,
 }) => {
   const navigate = useNavigate();
 
   const handleEditButton = () => {
-    navigate(`/${id}`);
+    setCurrentId(id);
   };
 
   const [deletePost] = useDeletePostMutation();

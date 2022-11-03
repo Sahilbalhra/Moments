@@ -13,11 +13,16 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSignInUserMutation } from "../../features/api/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../features/user/userSlice";
 
 type formprops = {
   handleForm: (data: boolean) => void;
 };
 const Login: React.FC<formprops> = ({ handleForm }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -31,22 +36,25 @@ const Login: React.FC<formprops> = ({ handleForm }) => {
 
   if (isSuccess) {
     console.log("SignIn successful", data);
+    dispatch(setCredentials(data));
+    // localStorage.setItem("user",  JSON.stringify(data.user));
+    navigate("/");
   } else if (isError) {
     console.log("Error while signIn", data);
   }
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log("Form data:", form);
     signIn(form);
+    dispatch(setCredentials({ user: data.result, token: data.token }));
     handleClear();
+    // navigate("/");
   };
 
   const handleChange = (e: any) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleClear = () => {
     setForm({
       email: "",
@@ -56,8 +64,9 @@ const Login: React.FC<formprops> = ({ handleForm }) => {
 
   function handleGoogleLoginSuccess(tokenResponse) {
     const accessToken = tokenResponse.access_token;
-    console.log("access_token: " + accessToken);
-    // dispatch(signinGoogle(accessToken, navigate))
+    signIn({ googleAccessToken: accessToken });
+
+    // navigate("/");
   }
   const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 

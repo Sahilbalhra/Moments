@@ -2,8 +2,12 @@
 import { Center, Spinner, Text, Grid } from "@chakra-ui/react";
 import React from "react";
 import { useGetPostsQuery } from "../../features/api/apiSlice";
-import Post from "./Post/Post";
-const Posts = () => {
+import Post from "../../components/Post/Post";
+type postProps = {
+  setCurrentId: (active: string | null) => void;
+};
+
+const Posts: React.FC<postProps> = ({ setCurrentId }) => {
   const {
     data: postsData,
     isLoading,
@@ -25,23 +29,20 @@ const Posts = () => {
           />
         </Center>
       ) : isSuccess ? (
-          <Grid
-            my='8'
-            gap={0}
-            gridTemplateColumns='repeat(auto-fit)'
-          >
-            {postsData?.data.map((post) => (
-              <Post
-                key={post._id}
-                image={post.selectedFile}
-                title={post.title}
-                message={post.message}
-                tags={post.tags}
-                likes={post.likes}
-                id={post._id}
-              />
-            ))}
-          </Grid>
+        <Grid my='8' gap={0} gridTemplateColumns='repeat(auto-fit)'>
+          {postsData?.data.map((post) => (
+            <Post
+              key={post._id}
+              image={post.selectedFile}
+              title={post.title}
+              message={post.message}
+              tags={post.tags}
+              likes={post.likes}
+              id={post._id}
+              setCurrentId={setCurrentId}
+            />
+          ))}
+        </Grid>
       ) : isError ? (
         <Text>Something wrong happened</Text>
       ) : null}

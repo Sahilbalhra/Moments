@@ -9,14 +9,28 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Image,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+// import { useSelector } from "react-redux";
+// import { selectCurrentUser } from "../../features/user/userSlice";
+
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
-  const user = false;
+
+  // const user = useSelector(selectCurrentUser);
+  const user = JSON.parse(localStorage.getItem("user") as any);
+
   return (
-    <Flex h='70px' w='full' bg='gray.50' p={2} alignItems='center'>
+    <Flex
+      h='70px'
+      w='full'
+      bg='gray.50'
+      pt={2}
+      pb={2}
+      pl={8}
+      pr={8}
+      alignItems='center'
+    >
       <Text fontSize='xl' as='b' cursor='pointer' onClick={() => navigate("/")}>
         Moments
       </Text>
@@ -24,18 +38,12 @@ const NavBar: React.FC = () => {
       {user ? (
         <Menu>
           <MenuButton>
-            <Avatar cursor='pointer' />
+            <Avatar cursor='pointer' src={user.profilePicture} />
           </MenuButton>
           <MenuList>
             <MenuItem minH='48px'>
-              <Image
-                boxSize='2rem'
-                borderRadius='full'
-                src='https://placekitten.com/100/100'
-                alt='Fluffybuns the destroyer'
-                mr='12px'
-              />
-              <span>User Name</span>
+              <Avatar cursor='pointer' src={user.profilePicture} />
+              <span>{user.name}</span>
             </MenuItem>
             <MenuItem>LogOut</MenuItem>
           </MenuList>

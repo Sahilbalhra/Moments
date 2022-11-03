@@ -40,9 +40,9 @@ const Signup: React.FC<formprops> = ({ handleForm }) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log("Form data:", form);
+    // console.log("Form data:", form);
     signUpUser(form);
-    // handleClear();
+    handleClear();
   };
 
   const handleChange = (e: any) => {
@@ -62,8 +62,7 @@ const Signup: React.FC<formprops> = ({ handleForm }) => {
 
   function handleGoogleLoginSuccess(tokenResponse) {
     const accessToken = tokenResponse.access_token;
-    console.log("access_token: " + accessToken);
-    // dispatch(signinGoogle(accessToken, navigate))
+    signUpUser({ googleAccessToken: accessToken });
   }
   const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 

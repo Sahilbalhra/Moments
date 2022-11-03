@@ -3,7 +3,19 @@ import { Post, AllPosts } from "../../models/posts.model";
 
 export const apiSlice = createApi({
   reducerPath: "posts",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/posts" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5000/posts",
+    // prepareHeaders: (headers, { getState }) => {
+    //   const token = (getState() as RootState).auth.token;
+
+    //   // If we have a token set in state, let's assume that we should be passing it.
+    //   if (token) {
+    //     headers.set("authorization", `Bearer ${token}`);
+    //   }
+
+    //   return headers;
+    // },
+  }),
   tagTypes: ["Posts"],
   endpoints: (builder) => ({
     createPost: builder.mutation<Post, any>({

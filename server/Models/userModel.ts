@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema(
       minLength: 5,
     },
     profilePicture: { type: String, required: false },
+    verified: { type: Boolean, required: false },
   },
   {
     timestamps: true,
